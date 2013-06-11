@@ -30,6 +30,8 @@ Partial Class MainForm
         Me.cmdLoad = New System.Windows.Forms.Button
         Me.cmdConvert = New System.Windows.Forms.Button
         Me.lblMessage = New System.Windows.Forms.Label
+        Me.cmdUp = New System.Windows.Forms.Button
+        Me.CmdDown = New System.Windows.Forms.Button
         Me.SuspendLayout()
         '
         'pbar
@@ -102,11 +104,31 @@ Partial Class MainForm
         Me.lblMessage.Size = New System.Drawing.Size(0, 13)
         Me.lblMessage.TabIndex = 17
         '
+        'cmdUp
+        '
+        Me.cmdUp.Location = New System.Drawing.Point(151, 22)
+        Me.cmdUp.Name = "cmdUp"
+        Me.cmdUp.Size = New System.Drawing.Size(104, 23)
+        Me.cmdUp.TabIndex = 18
+        Me.cmdUp.Text = "Move Up"
+        Me.cmdUp.UseVisualStyleBackColor = True
+        '
+        'CmdDown
+        '
+        Me.CmdDown.Location = New System.Drawing.Point(261, 22)
+        Me.CmdDown.Name = "CmdDown"
+        Me.CmdDown.Size = New System.Drawing.Size(104, 23)
+        Me.CmdDown.TabIndex = 19
+        Me.CmdDown.Text = "Move Down"
+        Me.CmdDown.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(761, 434)
+        Me.Controls.Add(Me.CmdDown)
+        Me.Controls.Add(Me.cmdUp)
         Me.Controls.Add(Me.lblMessage)
         Me.Controls.Add(Me.pbar)
         Me.Controls.Add(Me.CheckBox1)
@@ -129,5 +151,7 @@ Partial Class MainForm
     Friend WithEvents cmdLoad As System.Windows.Forms.Button
     Friend WithEvents cmdConvert As System.Windows.Forms.Button
     Friend WithEvents lblMessage As System.Windows.Forms.Label
+    Friend WithEvents cmdUp As System.Windows.Forms.Button
+    Friend WithEvents CmdDown As System.Windows.Forms.Button
 
 End Class
