@@ -32,6 +32,7 @@ Partial Class MainForm
         Me.lblMessage = New System.Windows.Forms.Label
         Me.cmdUp = New System.Windows.Forms.Button
         Me.CmdDown = New System.Windows.Forms.Button
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel
         Me.SuspendLayout()
         '
         'pbar
@@ -79,19 +80,19 @@ Partial Class MainForm
         'cmdLoad
         '
         Me.cmdLoad.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdLoad.Location = New System.Drawing.Point(535, 18)
+        Me.cmdLoad.Location = New System.Drawing.Point(443, 22)
         Me.cmdLoad.Name = "cmdLoad"
-        Me.cmdLoad.Size = New System.Drawing.Size(104, 23)
+        Me.cmdLoad.Size = New System.Drawing.Size(88, 23)
         Me.cmdLoad.TabIndex = 12
-        Me.cmdLoad.Text = "Load PDF Files"
+        Me.cmdLoad.Text = "Load PDF"
         Me.cmdLoad.UseVisualStyleBackColor = True
         '
         'cmdConvert
         '
         Me.cmdConvert.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdConvert.Location = New System.Drawing.Point(645, 18)
+        Me.cmdConvert.Location = New System.Drawing.Point(536, 22)
         Me.cmdConvert.Name = "cmdConvert"
-        Me.cmdConvert.Size = New System.Drawing.Size(104, 23)
+        Me.cmdConvert.Size = New System.Drawing.Size(86, 23)
         Me.cmdConvert.TabIndex = 11
         Me.cmdConvert.Text = "Merge PDF"
         Me.cmdConvert.UseVisualStyleBackColor = True
@@ -108,25 +109,36 @@ Partial Class MainForm
         '
         Me.cmdUp.Location = New System.Drawing.Point(151, 22)
         Me.cmdUp.Name = "cmdUp"
-        Me.cmdUp.Size = New System.Drawing.Size(104, 23)
+        Me.cmdUp.Size = New System.Drawing.Size(81, 23)
         Me.cmdUp.TabIndex = 18
         Me.cmdUp.Text = "Move Up"
         Me.cmdUp.UseVisualStyleBackColor = True
         '
         'CmdDown
         '
-        Me.CmdDown.Location = New System.Drawing.Point(261, 22)
+        Me.CmdDown.Location = New System.Drawing.Point(238, 22)
         Me.CmdDown.Name = "CmdDown"
-        Me.CmdDown.Size = New System.Drawing.Size(104, 23)
+        Me.CmdDown.Size = New System.Drawing.Size(83, 23)
         Me.CmdDown.TabIndex = 19
         Me.CmdDown.Text = "Move Down"
         Me.CmdDown.UseVisualStyleBackColor = True
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Location = New System.Drawing.Point(638, 32)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(111, 13)
+        Me.LinkLabel1.TabIndex = 21
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "www.thetechhub.com"
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(761, 434)
+        Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.CmdDown)
         Me.Controls.Add(Me.cmdUp)
         Me.Controls.Add(Me.lblMessage)
@@ -153,5 +165,6 @@ Partial Class MainForm
     Friend WithEvents lblMessage As System.Windows.Forms.Label
     Friend WithEvents cmdUp As System.Windows.Forms.Button
     Friend WithEvents CmdDown As System.Windows.Forms.Button
+    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
 
 End Class
