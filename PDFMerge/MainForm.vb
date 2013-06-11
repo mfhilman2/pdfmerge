@@ -147,4 +147,23 @@ Public Class MainForm
         End If
     End Sub
 
+    Private Sub cmdUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUp.Click
+        If Me.FileList.Items.Count > 1 AndAlso Me.FileList.SelectedIndex > 0 Then
+            Dim lastobj = DirectCast(FileList.Items(Me.FileList.SelectedIndex), CustomListItem)
+            FileList.Items.Insert(FileList.SelectedIndex - 1, New CustomListItem(lastobj.FileName, lastobj.FullPath))
+            FileList.SelectedIndex = FileList.SelectedIndex - 2
+            FileList.SetItemChecked(FileList.SelectedIndex, True)
+            FileList.Items.RemoveAt(FileList.SelectedIndex + 2)
+        End If
+    End Sub
+
+    Private Sub CmdDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CmdDown.Click
+        If Me.FileList.Items.Count > 1 AndAlso Me.FileList.SelectedIndex < Me.FileList.Items.Count - 1 Then
+            Dim lastobj = DirectCast(FileList.Items(Me.FileList.SelectedIndex), CustomListItem)
+            FileList.Items.Insert(FileList.SelectedIndex + 2, New CustomListItem(lastobj.FileName, lastobj.FullPath))
+            FileList.SelectedIndex = FileList.SelectedIndex + 2
+            FileList.SetItemChecked(FileList.SelectedIndex, True)
+            FileList.Items.RemoveAt(FileList.SelectedIndex - 2)
+        End If
+    End Sub
 End Class
