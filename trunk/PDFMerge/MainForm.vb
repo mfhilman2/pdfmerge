@@ -1,38 +1,18 @@
 ﻿Imports System.IO
-Imports org.apache.pdfbox.PDFMerger
-Imports org.apache.pdfbox.util
-Imports java.io.File
-Imports java.io.FileInputStream
-Imports java.io.IOException
-Imports java.io.InputStream
-Imports java.io.OutputStream
-Imports java.util.ArrayList
-Imports java.util.Vector
-Imports org.apache.pdfbox.cos.COSArray
-Imports org.apache.pdfbox.cos.COSDictionary
-Imports org.apache.pdfbox.cos.COSInteger
-Imports org.apache.pdfbox.cos.COSName
-Imports org.apache.pdfbox.cos.COSNumber
-Imports org.apache.pdfbox.cos.COSStream
-Imports org.apache.pdfbox.exceptions.COSVisitorException
-Imports org.apache.pdfbox.pdmodel.PDDocumentCatalog
-Imports org.apache.pdfbox.pdmodel.PDDocumentInformation
-Imports org.apache.pdfbox.pdmodel.PDDocumentNameDictionary
-Imports org.apache.pdfbox.pdmodel.common.COSArrayList
-Imports org.apache.pdfbox.pdmodel.common.PDStream
-Imports org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline
-Imports org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem
-Imports org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm
-Imports org.apache.pdfbox.pdmodel.interactive.form.PDField
-Imports org.apache.pdfbox.pdmodel.interactive.form.PDFieldFactory
+
+Imports iTextSharp.text.pdf
 Public Class MainForm
+    Dim Files As List(Of String)
+
     Private Sub cmdLoad_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdLoad.Click
+
         Dim ofd As New OpenFileDialog
         ofd.Filter = "PDF Files (*.PDF)|*.PDF"
         ofd.Multiselect = True
         If (ofd.ShowDialog() <> Windows.Forms.DialogResult.OK) Then Return
 
         For Each file As String In ofd.FileNames
+            Files = ofd.FileNames.ToList()
             Dim index As Integer = Me.FileList.Items.Add(New CustomListItem(System.IO.Path.GetFileName(file), file))
             Me.FileList.SetItemChecked(index, True)
         Next
@@ -76,27 +56,19 @@ Public Class MainForm
             pbar.Maximum = total
             Application.DoEvents()
 
-       
-            Dim merger As PDFMergerUtility = New PDFMergerUtility()
-            Dim count As Integer
+            Files.Clear()
+
             For Each item As CustomListItem In Me.FileList.CheckedItems
-
-                merger.addSource(item.FullPath)
-
-                count += 1
-                pbar.Value = count
-                pbar.Refresh()
-                lblProgress.Text = String.Format("Processing {0} of {1}", count, total)
-                Application.DoEvents()
+                Files.Add(item.FullPath)
             Next
+
+            CombineMultiplePDFs(Files, fsd.FileName)
+
 
 
             lblProgress.Text = "Writing to PDF file"
             lblProgress.Refresh()
             Threading.Thread.Sleep(10)
-
-            merger.setDestinationFileName(fsd.FileName)
-            merger.mergeDocuments()
 
 
             lblProgress.Text = "Completed ..."
@@ -112,5 +84,67 @@ Public Class MainForm
         End Try
     End Sub
 
-    
+    Private Sub CombineMultiplePDFs(ByVal fileNames As List(Of String), ByVal outFile As String)
+        Dim pageOffset As Integer = 0
+        Dim master As New ArrayList()
+        Dim f As Integer = 0
+
+        Dim document As iTextSharp.text.Document = Nothing
+        Dim writer As PdfCopy = Nothing
+        While f < fileNames.Count
+            ' we create a reader for a certain document
+
+
+            pbar.Value = f
+            pbar.Refresh()
+            lblProgress.Text = String.Format("Processing {0} of {1}", f, fileNames.Count)
+            Application.DoEvents()
+
+
+            Dim reader As New PdfReader(fileNames(f))
+            reader.ConsolidateNamedDestinations()
+            ' we retrieve the total number of pages
+            Dim n As Integer = reader.NumberOfPages
+            Dim bookmarks As ArrayList = SimpleBookmark.GetBookmark(reader)
+            If bookmarks IsNot Nothing Then
+                If pageOffset <> 0 Then
+                    SimpleBookmark.ShiftPageNumbers(bookmarks, pageOffset, Nothing)
+                End If
+                master.AddRange(bookmarks)
+            End If
+            pageOffset += n
+
+            If f = 0 Then
+                ' step 1: creation of a document-object
+                document = New iTextSharp.text.Document(reader.GetPageSizeWithRotation(1))
+                ' step 2: we create a writer that listens to the document
+                writer = New PdfCopy(document, New FileStream(outFile, FileMode.Create))
+                ' step 3: we open the document
+                document.Open()
+            End If
+            ' step 4: we add content
+            Dim i As Integer = 0
+            While i < n
+                i += 1
+                If writer IsNot Nothing Then
+                    Dim page As PdfImportedPage = writer.GetImportedPage(reader, i)
+                    writer.AddPage(page)
+                End If
+            End While
+            Dim form As PRAcroForm = reader.AcroForm
+            If form IsNot Nothing AndAlso writer IsNot Nothing Then
+                writer.CopyAcroForm(reader)
+            End If
+            f += 1
+        End While
+        pbar.Value = pbar.Maximum
+        If master.Count > 0 AndAlso writer IsNot Nothing Then
+            writer.Outlines = master
+        End If
+        ' step 5: we close the document
+        If document IsNot Nothing Then
+            document.Close()
+        End If
+    End Sub
+
 End Class
